@@ -8,7 +8,7 @@ import {
   KeyboardAwareScrollView,
 } from "react-native-keyboard-aware-scroll-view";
 import { validateEmail, removeWhitespace } from "../utils/common";
-import { Text } from "react-native";
+import { images } from "../utils/images";
 
 const Container = styled.View`
   justify-content: center;
@@ -26,6 +26,7 @@ const ErrorText = styled.Text`
   color: ${({ theme }) => theme.errorText};
 `;
 
+/// function start point
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmaiil] = useState("");
@@ -33,6 +34,7 @@ function Signup() {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [disabled, setDisabled] = useState(true);
+  const [photoUrl, setPhotoUrl] = useState(images.basic_photo);
 
   const emailRef = useRef();
   const passwordRef = useRef();
@@ -71,7 +73,7 @@ function Signup() {
   return (
     <KeyboardAwareScrollView extraScrollHeight={20}>
       <Container>
-        <Image rounded={true} />
+        <Image rounded={true} url={photoUrl} />
         <Input
           label="Name"
           value={name}
