@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { Alert } from "react-native";
 import styled from "styled-components";
 import { Image } from "../components";
 import { Input } from "../components";
@@ -9,6 +10,8 @@ import {
 } from "react-native-keyboard-aware-scroll-view";
 import { validateEmail, removeWhitespace } from "../utils/common";
 import { images } from "../utils/images";
+import { signup } from "../utils/firebase";
+import { savepw } from "../utils/firebase";
 
 const Container = styled.View`
   justify-content: center;
@@ -26,7 +29,7 @@ const ErrorText = styled.Text`
   color: ${({ theme }) => theme.errorText};
 `;
 
-/// function start point
+/// function start
 function Signup() {
   const [name, setName] = useState("");
   const [email, setEmaiil] = useState("");
@@ -40,7 +43,16 @@ function Signup() {
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
 
-  function _handleSignupButtonPress() {}
+  /// signup button function
+  const _handleSignupButtonPress = async () => {
+    try {
+      const user = await signup({ email, password, name });
+      Alert.alert("Signup Success", user.email);
+      console.log(user);
+    } catch (e) {
+      Alert.alert("Signup Error", e.message);
+    }
+  };
 
   const didMountRef = useRef();
 
@@ -69,11 +81,16 @@ function Signup() {
       !(name && email && password && passwordConfirm && !errorMessage)
     );
   }, [name, email, password, passwordConfirm, errorMessage]);
-
+  /// render start
   return (
     <KeyboardAwareScrollView extraScrollHeight={20}>
       <Container>
-        <Image rounded={true} url={photoUrl} />
+        <Image
+          rounded
+          url={photoUrl}
+          showButton
+          onChangeImage={(url) => setPhotoUrl(url)}
+        />
         <Input
           label="Name"
           value={name}
